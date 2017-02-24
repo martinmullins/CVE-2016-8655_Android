@@ -1,0 +1,21 @@
+#!/bin/bash
+
+
+run_a_test() {
+    target=$(./launch $1 | tee /dev/tty | grep target\ inode\ is | rev | awk '{print $1;}' | rev)
+#target="2838"
+
+
+    cd volatility
+    addr=$(./run_tests ~/CVE-2016-8655_Android/notfree.lime LinuxGoldfish-asdf-3_4ARM wherealloc $target | grep "socket alloc " | awk '{print $4;}')
+    if [ -z $addr ]; then echo "Failed to find allocated sock !!!"; else
+    ./checkaddr.exp ~/CVE-2016-8655_Android/freed.lime $addr >> ~/results
+    fi
+    cd -
+}
+
+for i in 100; do
+    echo running test $i >> ~/results
+    run_a_test $i
+done
+
