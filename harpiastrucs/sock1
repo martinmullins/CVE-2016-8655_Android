@@ -1,0 +1,26 @@
+struct packet_sock {
+    /* struct sock has to be the first member of packet_sock */
+    struct sock		sk;
+    struct packet_fanout	*fanout;
+    struct tpacket_stats	stats;
+    union  tpacket_stats_u	stats_u;
+    struct packet_ring_buffer	rx_ring;
+    struct packet_ring_buffer	tx_ring;
+    int			copy_thresh;
+    spinlock_t		bind_lock;
+    struct mutex		pg_vec_lock;
+    unsigned int		running:1,	/* prot_hook is attached*/
+                                auxdata:1,
+                                origdev:1,
+                                has_vnet_hdr:1;
+    int			ifindex;	/* bound device		*/
+    __be16			num;
+    struct packet_mclist	*mclist;
+    atomic_t		mapped;
+    enum tpacket_versions	tp_version;
+    unsigned int		tp_hdrlen;
+    unsigned int		tp_reserve;
+    unsigned int		tp_loss:1;
+    unsigned int		tp_tstamp;
+    struct packet_type	prot_hook ____cacheline_aligned_in_smp;
+};

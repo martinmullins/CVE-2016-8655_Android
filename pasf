@@ -1,0 +1,19 @@
+Ok so it is hard for me to test because I don't have a sim and my carrier usually enables tethering anyway.
+
+But I did work out how to set the property net.tethering.noprovisioning=true. So basically when your phone starts up it reads in several *.prop files (including /system/build.prop) and puts them into a "store" that can then be used by several applications, ie. for tethering etc.
+
+/system/build.prop is reset every time your reboot! Changing that file and rebooting will do nothing and the "store" will be the same every time.
+
+However we can access this "store" after it has been loaded and update/add entries. You will need to have ADB installed for the next steps. (Google how to in case you don't, same goes for anything else you find confusing, I do not know how much you know :) )
+
+Start a shell:
+[CODE]adb shell
+shell@harpia:/ $
+shell@harpia:/ $getprop
+....
+[/CODE]
+
+This is a list of all the system properties. You will notice that there is not one for the tethering option and our aim will be to add one.
+
+
+

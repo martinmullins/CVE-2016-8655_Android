@@ -1,0 +1,1 @@
+cmd_/home/marto/CVE-2016-8655_Android/mod/hello-5.ko := /home/marto/toolchain/bin/arm-linux-androideabi-ld -EL -r  -T /home/marto/goldfish/scripts/module-common.lds --build-id  -o /home/marto/CVE-2016-8655_Android/mod/hello-5.ko /home/marto/CVE-2016-8655_Android/mod/hello-5.o /home/marto/CVE-2016-8655_Android/mod/hello-5.mod.o

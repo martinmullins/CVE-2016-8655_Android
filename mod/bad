@@ -1,0 +1,74 @@
+follow_pte() for a6ffb000
+ pgd = 2d572831
+  pud = 2d572831
+   pmd = 2d572831
+    pte = 3716614f
+    pfn = 225638
+   phys = 37166000
+    kva = f7166000
+page_off= c0000000
+page_shi= 12
+page_exe= 1
+page_present= 1
+page_write= 1
+page_dirty= 64
+page_young= 2
+page_special= 0
+page_present_user= 1
+is_vmalloc_addr=u 0
+pfn_to_page=c0fbccc0highmem=1is_vmalloc_addr=k 1
+virt_to_page= c0fbccc0executing page....
+c03608e0
+f7166000
+
+
+A: ac6fd000
+follow_pte() for ac6fd000
+ pgd = 2d63c831
+  pud = 2d63c831
+   pmd = 2d63c831
+    pte = 346b814f
+    pfn = 214712
+   phys = 346b8000
+    kva = f46b8000
+page_off= c0000000
+page_shi= 12
+page_exe= 1
+page_present= 1
+page_write= 1
+page_dirty= 64
+page_young= 2
+page_special= 0
+page_present_user= 1
+is_vmalloc_addr=u 0
+pfn_to_page=c0f67700
+highmem=1
+is_vmalloc_addr=k 1
+virt_to_page= c0f67700
+executing page....
+c03608e0
+
+
+   pmd = 2d489831
+    pte = 3817f18f
+    pfn = 229759
+   phys = 3817f000
+    kva = f817f000
+page_off= c0000000
+page_shi= 12
+page_exe= 1
+page_present= 1
+page_write= 0
+page_dirty= 0
+page_young= 2
+page_special= 0
+page_present_user= 1
+is_vmalloc_addr=u 0
+pfn_to_page=c0fdcfe0
+highmem=1
+is_vmalloc_addr=k 1
+virt_to_page= c0fdcfe0
+executing page....
+c03608e0
+f817f000
+

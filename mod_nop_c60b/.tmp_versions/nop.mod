@@ -1,0 +1,2 @@
+/home/marto/CVE-2016-8655_Android/mod_nop_c60b/nop.ko
+/home/marto/CVE-2016-8655_Android/mod_nop_c60b/nop.o
